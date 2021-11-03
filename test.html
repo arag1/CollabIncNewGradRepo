@@ -10,13 +10,24 @@
 <button id="saveBtn">Save</button>
 
 <script>
+    /*** Collabora Inc Assessment by Anurag Aiyer ***/
+    /*** The goal is to list all the discrepancies with certain email ***/
+    /*** This involved using the Levenshtein Distance Algorithm and comma number removal implementations***/
+    /*** There was a nice CSV to Array function I ended using which made it very straightforward parsing through***/
+    /*** I formated the csv files colab_file1.csv and colab_file2.csv in a jupyter notebook***/
+    /*** Doing the analysis was quite straightforward ***/
     results = []; // array for storing results
     inputs = [document.getElementById('file1'), document.getElementById('file2')];
     let reader = new FileReader();
     let reader1 = new FileReader();
     let bytes = 50000;
+    /***This function uses CSVToArray to parse 2 csv files as arrays
+     * Main function is embedded which takes in 2 csv file arrays
+     * Made sure to implement an error catch if files are not distinct;
+     * If you run into error, alert is thrown and you need to refresh HTML page
+     * Similarity algorithm and number of subscribers comma removal processes created
+     ***/
     function readFile() {
-
         if(inputs[0].files[0].name == inputs[1].files[0].name){
             alert('Must select distinct file names!')
         }
@@ -83,6 +94,7 @@
         }
         return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
     }
+    /*** Distance function for strings***/
     function editDistance(s1, s2) {
         s1 = s1.toLowerCase();
         s2 = s2.toLowerCase();
