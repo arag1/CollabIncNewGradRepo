@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<input type="file" id="file1">
+<input type="file" id="file2">
+<button id="saveBtn">Save</button>
+
+<script>
+    results = []; // array for storing results
+    inputs = [document.getElementById('file1'), document.getElementById('file2')];
+    let reader = new FileReader();
+    let reader1 = new FileReader();
+    let bytes = 50000;
+    function readFile() {
+
+        if(inputs[0].files[0].name == inputs[1].files[0].name){
+            alert('Must select distinct file names!')
+        }
+
+        reader.onload = function (event) {
+            results[0] = CSVToArray(event.target.result);
+        };
+
+        reader1.onload = function (event) {
+            results[1] = CSVToArray(event.target.result);
+            /***We end up outputing gmails with Youtube Info discrepancies***/
+            function x(csv1, csv2){
+                let arr = []
+                for(var i = 1; i < 61; i ++){
+                    try {
+                        var a=csv1[i][3]
+                        a=a.replace(/\,/g,'')
+                        a=Number(a)
+                    } catch (error) {
+                        console.error(error);
+                        // expected output: ReferenceError: nonExistentFunction is not defined
+                        // Note - error messages will vary depending on browser
+                    }
+                    try {
+                        var b=csv2[i][3]
+                        b=b.replace(/\,/g,'')
+                        b=Number(b)
+                    } catch (error) {
+                        console.error(error);
+                        // expected output: ReferenceError: nonExistentFunction is not defined
+                        // Note - error messages will vary depending on browser
+                    }
+                    if((a != b) || similarity(csv1[i][2], csv2[i][2]) < 0.2){
+                        arr.push(csv1[i][1])
+                    }
+                    else if (similarity(csv1[i][2], csv2[i][2]) < 0.2){
+                        arr.push(csv1[i][1])
+                    }
+                }
+                return arr;
+            }
+            document.write(JSON.stringify(x(results[0], results[1])))
+        };
+        reader.readAsText(inputs[0].files[0].slice(0, bytes))
+        reader1.readAsText(inputs[1].files[0].slice(0, bytes))
+
+    }
+
+    var btn = document.getElementById('saveBtn');
+    btn.onclick = function() {
+        readFile();
+    }
+    /***Function to APPLY similarity algorithm***/
+    function similarity(s1, s2) {
+        var longer = s1;
+        var shorter = s2;
+        if (s1.length < s2.length) {
+            longer = s2;
+            shorter = s1;
+        }
+        var longerLength = longer.length;
+        if (longerLength == 0) {
+            return 1.0;
+        }
+        return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+    }
+    function editDistance(s1, s2) {
+        s1 = s1.toLowerCase();
+        s2 = s2.toLowerCase();
+        var costs = new Array();
+        for (var i = 0; i <= s1.length; i++) {
+            var lastValue = i;
+            for (var j = 0; j <= s2.length; j++) {
+                if (i == 0)
+                    costs[j] = j;
+                else {
+                    if (j > 0) {
+                        var newValue = costs[j - 1];
+                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
+                            newValue = Math.min(Math.min(newValue, lastValue),
+                                costs[j]) + 1;
+                        costs[j - 1] = lastValue;
+                        lastValue = newValue;
+                    }
+                }
+            }
+            if (i > 0)
+                costs[s2.length] = lastValue;
+        }
+        return costs[s2.length];
+    }
+    /***Function to change CSV into Array***/
+    function CSVToArray(strData, strDelimiter) {
+        strDelimiter = (strDelimiter || ",");
+        let objPattern = new RegExp(
+            (
+                "(\\" + strDelimiter + "|\\r?\\n|\\r|^)" +
+                "(?:\"([^\"]*(?:\"\"[^\"]*)*)\"|" +
+                "([^\"\\" + strDelimiter + "\\r\\n]*))"
+            ),
+            "gi"
+        );
+        let arrData = [[]];
+        let arrMatches = null;
+        while (arrMatches = objPattern.exec(strData)) {
+            let strMatchedDelimiter = arrMatches[1];
+            let strMatchedValue = [];
+            if (strMatchedDelimiter.length && (strMatchedDelimiter != strDelimiter)) {
+                arrData.push([]);
+            }
+            if (arrMatches[2]) {
+                strMatchedValue = arrMatches[2].replace(new RegExp("\"\"", "g"),"\"");
+            } else {
+                strMatchedValue = arrMatches[3];
+            }
+            arrData[arrData.length - 1].push(strMatchedValue);
+        }
+        return (arrData);
+    }
+</script>
+</body>
+</html>
