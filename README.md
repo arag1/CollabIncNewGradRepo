@@ -1,7 +1,7 @@
 # CollabIncNewGradAssessment
 The objective of this new grad assessment is comparing two csv files that contain emails with a discrepancy.
 In addition, an error will be asserted if the files are NOT distinct. The primary algorithm that was is the 
-LEVENSHTEIN Distance, which compares the similarity between two strings. Here were the follwowing implementations I tried
+used LEVENSHTEIN Distance, which compares the similarity between two strings. Here were the follwowing implementations I tried
 to implement:
   Experiment 1. React - I was unable to figure out how to integrate React with csv reading styles
   Experiment 2. NodeJS- Having trouble running certain packages
