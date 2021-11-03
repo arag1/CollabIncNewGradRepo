@@ -7,4 +7,4 @@ to implement:
   Experiment 2. NodeJS- Having trouble running certain packages
   Experiment 3. Embedded Javascript within HTML - This took a lot of time and research which involved using the FileReader package to parse the csv files
 Some other methods that I used was CSVtoArray and x to output the necessary list of emails. Even though this take-home exam took a while,
-it was truly fantastic and rewarding!
+it was truly fantastic and rewarding! You can easily run the test.html in a browser (Google Chrome preferablly).
