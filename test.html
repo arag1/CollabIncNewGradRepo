@@ -41,7 +41,7 @@
             /***We end up outputing gmails with Youtube Info discrepancies***/
             function x(csv1, csv2){
                 let arr = []
-                for(var i = 1; i < 61; i ++){
+                for(var i = 1; i < (csv1.length - 1); i ++){
                     try {
                         var a=csv1[i][3]
                         a=a.replace(/\,/g,'')
